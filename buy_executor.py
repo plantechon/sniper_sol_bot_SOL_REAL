@@ -7,16 +7,23 @@ from solana.rpc.api import Client
 import os
 import json
 import ast
+from telegram_notify import notify
 
 def get_sol_price():
     res = requests.get("https://public-api.birdeye.so/public/price?address=So11111111111111111111111111111111111111112",
                        headers={"X-API-KEY": os.getenv("HELIUS_API_KEY")})
-    return float(res.json()["data"]["value"])
+    res_json = res.json()
+    if "data" not in res_json:
+        notify(f"❌ ERRO: falha ao obter preço do SOL: {res_json}")
+        return 0
+    return float(res_json["data"]["value"])
 
 def buy_token(token):
     keypair = Keypair.from_bytes(bytes(ast.literal_eval(os.getenv("SOLANA_PRIVATE_KEY"))))
     rpc = Client(os.getenv("RPC_URL"))
     sol_price = get_sol_price()
+    if sol_price == 0:
+        return "NO_PRICE", 0
     usd_to_sol = 20 / sol_price
     amount_lamports = int(usd_to_sol * 1e9)
 
