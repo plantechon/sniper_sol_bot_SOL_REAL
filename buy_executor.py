@@ -1,7 +1,7 @@
 
 import requests
 import base64
-from solana.transaction import Transaction
+from solders.transaction import Transaction
 from solana.rpc.api import Client
 from solana.keypair import Keypair
 import os
@@ -29,7 +29,7 @@ def buy_token(token):
     res = requests.post("https://quote-api.jup.ag/v6/swap", json=payload)
     swap_tx = base64.b64decode(res.json()["swapTransaction"])
 
-    tx = Transaction.deserialize(swap_tx)
+    tx = Transaction.from_bytes(swap_tx)
     tx.sign([keypair])
     txid = rpc.send_transaction(tx, keypair)["result"]
     return txid, round(usd_to_sol, 4)
