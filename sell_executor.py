@@ -24,7 +24,7 @@ def monitor_and_sell(token, entry_price):
             msg = (
                 f"💰 *SAÍDA COM LUCRO*
 "
-                f"Token: `{token['symbol']}`
+                f"Token: [`{token['symbol']}`](https://solscan.io/token/{token['mint']})
 "
                 f"Entrada: `{entry_price:.6f} SOL` (~${entry_price * sol_price:.2f})
 "
@@ -39,7 +39,7 @@ def monitor_and_sell(token, entry_price):
             msg = (
                 f"🔻 *SAÍDA COM PREJUÍZO*
 "
-                f"Token: `{token['symbol']}`
+                f"Token: [`{token['symbol']}`](https://solscan.io/token/{token['mint']})
 "
                 f"Entrada: `{entry_price:.6f} SOL` (~${entry_price * sol_price:.2f})
 "
