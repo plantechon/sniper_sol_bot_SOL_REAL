@@ -38,14 +38,12 @@ while True:
                 operando = True
                 tx_hash, entry_price = buy_token(token)
                 sol_price = get_sol_price()
-                notify(
-                    f"✅ ENTRADA: {token['symbol']}
-"
-                    f"`{entry_price:.6f} SOL` (~${entry_price * sol_price:.2f})
-"
-                    f"[Ver transação](https://solscan.io/tx/{tx_hash})",
-                    parse_mode="Markdown"
+                msg = (
+                    f"✅ ENTRADA: {token['symbol']}\n"
+                    f"`{entry_price:.6f} SOL` (~${entry_price * sol_price:.2f})\n"
+                    f"[Ver transação](https://solscan.io/tx/{tx_hash})"
                 )
+                notify(msg, parse_mode="Markdown")
                 monitor_and_sell(token, entry_price)
                 operando = False
                 break
