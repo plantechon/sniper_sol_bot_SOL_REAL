@@ -21,7 +21,7 @@ def monitor_and_sell(token, entry_price):
         price = get_price(token["mint"])
         if price >= tp:
             lucro_pct = ((price - entry_price) / entry_price) * 100
-            msg = (
+            notify(
                 f"💰 *SAÍDA COM LUCRO*
 "
                 f"Token: [`{token['symbol']}`](https://solscan.io/token/{token['mint']})
@@ -30,13 +30,13 @@ def monitor_and_sell(token, entry_price):
 "
                 f"Saída: `{price:.6f} SOL` (~${price * sol_price:.2f})
 "
-                f"Lucro: *+{lucro_pct:.2f}%*"
+                f"Lucro: *+{lucro_pct:.2f}%*",
+                parse_mode="Markdown"
             )
-            notify(msg, parse_mode="Markdown")
             return
         if price <= sl:
             perda_pct = ((entry_price - price) / entry_price) * 100
-            msg = (
+            notify(
                 f"🔻 *SAÍDA COM PREJUÍZO*
 "
                 f"Token: [`{token['symbol']}`](https://solscan.io/token/{token['mint']})
@@ -45,8 +45,8 @@ def monitor_and_sell(token, entry_price):
 "
                 f"Saída: `{price:.6f} SOL` (~${price * sol_price:.2f})
 "
-                f"Perda: *-{perda_pct:.2f}%*"
+                f"Perda: *-{perda_pct:.2f}%*",
+                parse_mode="Markdown"
             )
-            notify(msg, parse_mode="Markdown")
             return
         time.sleep(10)
