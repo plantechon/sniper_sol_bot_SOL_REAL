@@ -5,13 +5,26 @@ from buy_executor import buy_token, get_sol_price
 from sell_executor import monitor_and_sell
 from telegram_notify import notify
 from utils import get_new_tokens
+import os
+from solders.keypair import Keypair
+from solana.rpc.api import Client
+import ast
 
 operando = False
 
+def check_wallet_balance():
+    keypair = Keypair.from_bytes(bytes(ast.literal_eval(os.getenv("SOLANA_PRIVATE_KEY"))))
+    rpc = Client(os.getenv("RPC_URL"))
+    balance = rpc.get_balance(keypair.pubkey())["result"]["value"] / 1e9
+    if balance < 0.03:
+        notify(f"⚠️ Saldo insuficiente na carteira do bot: apenas {balance:.4f} SOL", parse_mode="Markdown")
+        return False
+    return True
+
 while True:
     try:
-        if operando:
-            time.sleep(5)
+        if operando or not check_wallet_balance():
+            time.sleep(30)
             continue
 
         tokens = get_new_tokens()
@@ -25,8 +38,14 @@ while True:
                 operando = True
                 tx_hash, entry_price = buy_token(token)
                 sol_price = get_sol_price()
-                notify(f"✅ ENTRADA: {token['symbol']}
-{entry_price:.6f} SOL (~${entry_price * sol_price:.2f}) | TX: {tx_hash}")
+                notify(
+                    f"✅ ENTRADA: {token['symbol']}
+"
+                    f"`{entry_price:.6f} SOL` (~${entry_price * sol_price:.2f})
+"
+                    f"[Ver transação](https://solscan.io/tx/{tx_hash})",
+                    parse_mode="Markdown"
+                )
                 monitor_and_sell(token, entry_price)
                 operando = False
                 break
