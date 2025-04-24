@@ -1,0 +1,7 @@
+services:
+  - type: worker
+    name: sniper-solana
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python3 app.py"
+    pythonVersion: 3.11.11
