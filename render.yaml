@@ -1,0 +1,7 @@
+services:
+  - type: worker
+    name: sniper-solana
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: "/opt/render/project/poetry/bin/poetry run python3 app.py"
+    pythonVersion: 3.11.11
