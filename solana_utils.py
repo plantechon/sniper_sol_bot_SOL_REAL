@@ -10,11 +10,9 @@ def check_new_pools(min_liquidity, known):
     try:
         response = requests.get("https://api.raydium.io/pairs")
         data = response.json()
-
         for pool in data:
             liquidity = float(pool.get('liquidity', 0))
             pool_id = pool.get('id')
-
             if liquidity >= min_liquidity and pool_id not in known:
                 known.add(pool_id)
                 return {

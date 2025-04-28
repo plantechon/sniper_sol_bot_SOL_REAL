@@ -39,7 +39,6 @@ async def monitor_pools():
                             break
 
                     em_operacao = False
-
         except Exception as e:
             await send_alert(f"Erro: {str(e)}")
             em_operacao = False
