@@ -1,13 +1,10 @@
 services:
-  - type: worker
+  - type: web
     name: sniper-solana
     env: python
-    buildCommand: |
-      python3 -m venv venv
-      . venv/bin/activate
-      pip install --upgrade pip
-      pip install -r requirements.txt
-    startCommand: |
-      . venv/bin/activate
-      python3 app.py
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 app.py
     pythonVersion: 3.11.11
+    envVars:
+      - key: PORT
+        value: 10000
